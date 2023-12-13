@@ -5,7 +5,9 @@ class TagsController {
     const { user_id } = request.params;
 
     const tags = await knex("tags")
-    .where({ user_id });
+      .select("tags.id", "tags.name", "tags.note_id", "notes.title as note_title")
+      .join("notes", "tags.note_id", "notes.id")
+      .where("tags.user_id", user_id);
 
     return response.json(tags);
   }
